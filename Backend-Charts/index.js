@@ -2,10 +2,14 @@ const express = require('express')
 const sequelize= require('./config/database')
 const Empleado = require('./model/Empleado')
 const Producto = require('./model/Producto')
+const cors = require ('cors')
+
 
 const app= express();
 app.use(express.json())
 var port = 5000;
+
+app.use(cors())
 
 //SELECT SUM(SALARY),DEPARTMENT_ID FROM EMPLEADO group by DEPARTMENT_ID;
 
@@ -16,7 +20,7 @@ app.get('/suma-salario-departamento', async(req,resp) =>{
         const result = await Empleado.findAll({
             attributes:[
                 'DEPARTMENT_ID',
-                [sequelize.fn('SUM', sequelize.col('SALARY')), 'Salario Total']
+                [sequelize.fn('SUM', sequelize.col('SALARY')), 'Salario_Total']
             ],
             group: ["DEPARTMENT_ID"]
         });
@@ -42,7 +46,7 @@ app.get('/maximo-salario-departamento/:idDeparment', async(req,resp) =>{
         const result = await Empleado.findAll({
             attributes:[
                 'DEPARTMENT_ID',
-                [sequelize.fn('MAX', sequelize.col('SALARY')), 'Salario Total']
+                [sequelize.fn('MAX', sequelize.col('SALARY')), 'Salario_Total']
             ],
             where: {DEPARTMENT_ID:idDeparment },
             group: ["DEPARTMENT_ID"]
@@ -63,7 +67,7 @@ app.get('/sumar_ProducType',async (req,resp) =>{
         const result = await Producto.findAll({
             attributes:[
                 'productType',
-                [sequelize.fn('SUM', sequelize.col('value')), 'Valor de ProducType']
+                [sequelize.fn('SUM', sequelize.col('value')), 'Valor_de_ProducType']
             ],
             group: ["productType"]
         });
@@ -81,7 +85,7 @@ app.get('/maximo_ProducType',async (req,resp) =>{
         const result = await Producto.findAll({
             attributes: [
                 'productType',
-                [sequelize.fn('MAX', sequelize.col('value')), 'Valor Maximo de ProducType']
+                [sequelize.fn('MAX', sequelize.col('value')), 'Valor_Maximo_de_ProducType']
             ],
             group: ["productType"]
         });
@@ -98,7 +102,7 @@ app.get('/minimo_ProducType',async (req,resp) =>{
         const result = await Producto.findAll({
             attributes: [
                 'productType',
-                [sequelize.fn('MIN', sequelize.col('value')), 'Valor minimo de ProducType']
+                [sequelize.fn('MIN', sequelize.col('value')), 'Valor_minimo_de_ProducType']
             ],
             group: ["productType"]
         });
@@ -134,7 +138,7 @@ app.get('/count_ProducType',async (req,resp) =>{
         const result = await Producto.findAll({
             attributes: [
                 'productType',
-                [sequelize.fn('COUNT', sequelize.col('value')), 'contador de ProducType']
+                [sequelize.fn('COUNT', sequelize.col('value')), 'Contador_de_ProducType']
                 
             ],
             group: ["productType"]
@@ -152,7 +156,7 @@ app.get('/AVG_categoryCode',async (req,resp) =>{
         const result = await Producto.findAll({
             attributes: [
                 'categoryCode',
-                [sequelize.fn('AVG', sequelize.col('value')), 'Promedio de categoryCode ']
+                [sequelize.fn('AVG', sequelize.col('value')), 'Promedio_de_categoryCode ']
                 
             ],
             group: ["categoryCode"]
@@ -170,7 +174,7 @@ app.get('/count_productos_disponibles', async (req, resp) => {
         const result = await Producto.findAll({
             attributes: [
                 'status',
-                [sequelize.fn('COUNT', sequelize.col('partNumber')), 'contador de cantidad disponibles en status']
+                [sequelize.fn('COUNT', sequelize.col('partNumber')), 'Contador_de_cantidad_disponibles_en_status']
             ],
             where: {
                 status: 'ACTIVE' 
@@ -190,7 +194,7 @@ app.get('/count_productos_disponibles_inactivos', async (req, resp) => { /*esta 
         const result = await Producto.findAll({
             attributes: [
                 'status',
-                [sequelize.fn('COUNT', sequelize.col('partNumber')), 'contador de cantidad disponibles en status']
+                [sequelize.fn('COUNT', sequelize.col('partNumber')), 'Contador_de_cantidad_disponibles_en_status']
             ],
             
             group: ['status']
